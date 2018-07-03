@@ -1,0 +1,45 @@
+query q {
+  usuario(input: {}) {
+    email
+    id
+    apelido
+    cartao {
+      id
+    }
+  }
+}
+
+mutation r {
+  registerMedico(
+    input: {
+      nome: "Joao"
+      apelido: "Joao"
+      cpf: "x"
+      rg: "x"
+      sexo: "x"
+      dataNasc: 0
+      email: "x"
+      senha: "x"
+      crm: "x"
+      endereco: {
+        rua: "x"
+        numero: 0
+        complemento: "x"
+        bairro: "x"
+        cidade: "x"
+        cep: "x"
+        uf: "x"
+      }
+      residenciaPrincipal: { nome: "x", descricao: "x", valorMedio: 0.1 }
+      diploma: []
+      certificado: {
+        nomeEvento: "x"
+        lugar: "x"
+        horas: "x"
+        areaDeEspecialidade: "x"
+      }
+    }
+  ) {
+    id
+  }
+}

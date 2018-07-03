@@ -1,0 +1,13 @@
+begin transaction;
+drop table PESSOA;
+drop table EMERGENCIA;
+drop table PRESCRICAO;
+drop table MEDICAMENTO;
+drop table EXAME;
+drop table FEEDBACK;
+drop table CONSULTA;
+drop table USUARIO;
+drop table PACIENTE;
+drop table MEDICO;
+drop table AGENDA;
+commit;

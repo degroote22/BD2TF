@@ -33,7 +33,7 @@
  *****************************************************************************/
 
 // var oracledb = require("oracledb");
-import oracledb from "oracledb";
+import * as oracledb from "oracledb";
 import dbConfig from "./dbconfig";
 // var dbConfig = require("./dbconfig.js");
 

@@ -1,0 +1,170 @@
+type TEndereco {
+  id: ID!
+  rua: String!
+  numero: Int!
+  complemento: String!
+  bairro: String!
+  cidade: String!
+  cep: String!
+  uf: String!
+}
+
+interface TPessoa {
+  id: ID!
+  nome: String!
+  apelido: String!
+  cpf: String!
+  rg: String!
+  sexo: String!
+  dataNasc: Int!
+  endereco: TEndereco!
+}
+
+type TConsulta {
+  id: String!
+}
+
+type TAgenda {
+  id: String!
+}
+
+type TFeedBack {
+  id: String!
+}
+
+type TPaciente implements TPessoa {
+  id: ID!
+  nome: String!
+  apelido: String!
+  cpf: String!
+  rg: String!
+  sexo: String!
+  dataNasc: Int!
+  endereco: TEndereco!
+  foto: String!
+  faz: [TConsulta!]!
+  e_um: TUsuario!
+}
+
+type TMedico implements TPessoa {
+  id: ID!
+  nome: String!
+  apelido: String!
+  cpf: String!
+  rg: String!
+  sexo: String!
+  dataNasc: Int!
+  endereco: TEndereco!
+  email: String!
+  senha: String!
+  crm: String!
+  residenciaPrincipal: TResidenencia!
+  residencia: TResidenencia
+  diploma: [TDiploma!]!
+  certificado: TCertificado!
+}
+
+type TResidenencia {
+  id: ID!
+  nome: String!
+  descricao: String!
+  valorMedio: Float!
+}
+
+type TDiploma {
+  id: ID!
+  instituicao: String!
+  dataFormatura: Int!
+  curso: String!
+}
+
+type TCertificado {
+  id: ID!
+  nomeEvento: String!
+  lugar: String!
+  horas: String!
+  areaDeEspecialidade: String!
+}
+
+type Tcartao {
+  numero: String!
+  validade: Int!
+}
+
+type TUsuario implements TPessoa {
+  id: ID!
+  nome: String!
+  apelido: String!
+  cpf: String!
+  rg: String!
+  sexo: String!
+  dataNasc: Int!
+  endereco: TEndereco!
+  email: String!
+  senha: String!
+  cartao: TCartao
+}
+
+type TCartao {
+  id: String!
+}
+
+input GetPessoaInput {
+  name: String
+  id: String
+}
+
+type Query {
+  usuario(input: GetPessoaInput): TUsuario
+  paciente(input: GetPessoaInput): TPaciente
+  medico(input: GetPessoaInput): TMedico
+}
+
+input RegisterResidenciaInput {
+  nome: String!
+  descricao: String!
+  valorMedio: Float!
+}
+
+input RegisterDiplomaInput {
+  instituicao: String!
+  dataFormatura: Int!
+  curso: String!
+}
+
+input RegisterCertificadoInput {
+  nomeEvento: String!
+  lugar: String!
+  horas: String!
+  areaDeEspecialidade: String!
+}
+
+input RegisterEnderecoInput {
+  rua: String!
+  numero: Int!
+  complemento: String!
+  bairro: String!
+  cidade: String!
+  cep: String!
+  uf: String!
+}
+
+input RegisterMedicoInput {
+  nome: String!
+  apelido: String!
+  cpf: String!
+  rg: String!
+  sexo: String!
+  dataNasc: Int!
+  endereco: RegisterEnderecoInput!
+  email: String!
+  senha: String!
+  crm: String!
+  residenciaPrincipal: RegisterResidenciaInput!
+  residencia: RegisterResidenciaInput
+  diploma: [RegisterDiplomaInput!]!
+  certificado: RegisterCertificadoInput!
+}
+type Mutation {
+  registerMedico(input: RegisterMedicoInput!): TMedico!
+}

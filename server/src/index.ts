@@ -1,17 +1,16 @@
+import * as fs from "fs";
 import { GraphQLServer } from "graphql-yoga";
 
-const typeDefs = `
-  type Query {
-    hello(name: String): String!
-  }
-`;
+const typeDefs = fs.readFileSync("./src/schema.graphql", "utf-8");
+const resolvers = {};
+const mocks = true;
+const server = new GraphQLServer({
+  typeDefs,
+  resolvers,
+  mocks
+} as any);
 
-const resolvers = {
-  Query: {
-    hello: (_, { name }: any) => `Hello ${name || "World"}`
-  }
-};
-
-const server = new GraphQLServer({ typeDefs, resolvers } as any);
-// tslint:disable-next-line:no-console
-server.start(() => console.log("Server is running on localhost:4000"));
+server.start(() =>
+  // tslint:disable-next-line:no-console
+  console.log("Seerveeeeeeeeeeeeeeeeeer is runningg on localhost:4000")
+);

