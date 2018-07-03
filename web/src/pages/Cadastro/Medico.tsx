@@ -50,6 +50,8 @@ const validate = (values: typeof initialValues) => {
   notEmpty("curriculum");
   notEmpty("residencia_principal");
   notEmpty("residencias_secundarias");
+  notEmpty("diplomas");
+  notEmpty("certificados");
 
   // endereco
   notEmpty("logradouro");
@@ -76,8 +78,8 @@ const initialValues = {
   curriculum: "",
   residencia_principal: "",
   residencias_secundarias: "",
-  diplomas: ""
-  //   certificados: [],
+  diplomas: "",
+  certificados: ""
 };
 class Medico extends React.Component<WithStyles<ClassesNames> & {}> {
   private onSubmit = alert;
@@ -170,10 +172,7 @@ class Medico extends React.Component<WithStyles<ClassesNames> & {}> {
           options={[
             { label: "Pediatria", value: ESPECIALIDADES.pediatria },
             { label: "Cardiologia", value: ESPECIALIDADES.cardiologia },
-            {
-              label: "ObstetriaObstetriaObstetriaObstetriaObstetria",
-              value: ESPECIALIDADES.obstetria
-            }
+            { label: "Obstetria", value: ESPECIALIDADES.obstetria }
           ].filter(x => x.value !== formikBag.values.residencia_principal)}
         />
         <FormikFile
@@ -183,7 +182,13 @@ class Medico extends React.Component<WithStyles<ClassesNames> & {}> {
           margin="normal"
           proccessFile={this.proccessFile}
         />
-
+        <FormikFile
+          name="certificados"
+          label="Certificados"
+          multi={true}
+          margin="normal"
+          proccessFile={this.proccessFile}
+        />
         <Typography variant="title" className={classes.title}>
           Endereço
         </Typography>

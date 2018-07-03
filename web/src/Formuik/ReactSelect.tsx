@@ -72,7 +72,7 @@ export class SelectWrapped extends React.Component<{
     if (this.props.multi) {
       return (
         <Chip
-          style={{ marginRight: 8 }}
+          style={{ marginRight: 8, marginTop: 8 }}
           tabIndex={-1}
           label={children}
           deleteIcon={<CancelIcon onTouchEnd={onDelete} />}
