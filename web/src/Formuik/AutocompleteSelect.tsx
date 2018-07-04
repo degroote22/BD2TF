@@ -48,6 +48,7 @@ export class AutoCompleteSelect<T> extends React.Component<
           inputProps: {
             classes,
             name: id,
+            disabled: isSubmitting,
             setTouched: this.setTouched,
             onDelete: this.onDelete,
             instanceId: id,
@@ -71,6 +72,9 @@ export class AutoCompleteSelect<T> extends React.Component<
   };
 
   private onDelete = (obj: { label: string; value: string }) => {
+    if (this.props.form.isSubmitting) {
+      return;
+    }
     const oldValues = this.props.form.values[this.props.field.name] as string;
     const splitted = oldValues.split(",");
     const filtered = splitted.filter(x => x !== obj.value);

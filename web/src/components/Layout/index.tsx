@@ -6,7 +6,8 @@ import withStyles, {
   WithStyles
 } from "@material-ui/core/styles/withStyles";
 import * as React from "react";
-import { DrawerContentPossibilities } from "src/utils/types";
+import { Routes, titles } from "src/singletons/HistoryManager";
+import { LoginPossibilities } from "src/utils/types";
 import AppBar from "./AppBar";
 import DrawerContent from "./DrawerContent";
 export const drawerWidth = 240;
@@ -14,21 +15,36 @@ const initialState = {
   drawerOpen: false
 };
 
+const getTitle = (pathname: string) => {
+  return titles[pathname] || pathname;
+};
+
+const getDrawerTitle = (auth: LoginPossibilities) => {
+  const map = {
+    [LoginPossibilities.anonimo]: "Médicos Aí",
+    [LoginPossibilities.medico]: "Opções de médicos",
+    [LoginPossibilities.usuario]: "Opções de usuário",
+    [LoginPossibilities.paciente]: "Opções de paciente"
+  };
+  return map[auth] || auth;
+};
+
 class Layout extends React.Component<
   WithStyles<ClassesNames> & {
-    title: string;
-    drawer: DrawerContentPossibilities;
+    pathname: string;
+    drawer: LoginPossibilities;
   },
   typeof initialState
 > {
   public readonly state = initialState;
   public render() {
-    const { children, classes, title } = this.props;
+    const { children, classes, pathname } = this.props;
     const { drawerOpen } = this.state;
+    const prettyTitle = getTitle(pathname);
     return (
       <div className={classes.root}>
         <div className={classes.appFrame}>
-          <AppBar title={title} onMenuClick={this.onOpen} />
+          <AppBar title={prettyTitle} onMenuClick={this.onOpen} />
           <Drawer
             open={drawerOpen}
             classes={{
@@ -45,7 +61,6 @@ class Layout extends React.Component<
               {this.renderDrawerContent()}
             </div>
           </Drawer>
-
           <Drawer
             variant="permanent"
             classes={{
@@ -63,16 +78,71 @@ class Layout extends React.Component<
     );
   }
 
+  private getDrawerList = () => {
+    if (this.props.drawer === LoginPossibilities.anonimo) {
+      return [
+        {
+          label: "Login",
+          to: Routes.login.index
+        },
+        { label: "Cadastro", to: Routes.cadastro.index },
+        { label: "Ajuda", to: Routes.ajuda.index }
+      ];
+    }
+
+    if (this.props.drawer === LoginPossibilities.medico) {
+      return [
+        { label: "Pedidos em aberto", to: Routes.logoff.index },
+        { label: "Pedidos concluídos", to: Routes.logoff.index },
+        {
+          label: "Meus dados",
+          to: Routes.medico.ver.index
+        },
+        { label: "Editar dados", to: Routes.medico.editar.index },
+        { label: "Sair da conta", to: Routes.logoff.index }
+      ];
+    }
+
+    if (this.props.drawer === LoginPossibilities.usuario) {
+      return [
+        { label: "Faturamento", to: Routes.logoff.index },
+        {
+          label: "Meus dados",
+          to: Routes.usuario.ver.index
+        },
+        { label: "Editar dados", to: Routes.usuario.editar.index },
+        { label: "Sair da conta", to: Routes.logoff.index }
+      ];
+    }
+
+    if (this.props.drawer === LoginPossibilities.paciente) {
+      return [
+        { label: "Marcar consulta", to: Routes.logoff.index },
+        {
+          label: "Meus dados",
+          to: Routes.paciente.ver.index
+        },
+        { label: "Editar dados", to: Routes.paciente.editar.index },
+        { label: "Sair da conta", to: Routes.logoff.index }
+      ];
+    }
+
+    throw Error("n implementado");
+  };
+
   private renderDrawerContent = () => {
     const { classes } = this.props;
+    const list = this.getDrawerList();
     return (
       <React.Fragment>
         <div className={classes.toolbar}>
-          <Typography variant="subheading">Nome da Plataforma</Typography>
+          <Typography variant="subheading">
+            {getDrawerTitle(this.props.drawer)}
+          </Typography>
         </div>
         <div>
           <Divider />
-          <DrawerContent onClick={this.onClose} />
+          <DrawerContent list={list} onClick={this.onClose} />
         </div>
       </React.Fragment>
     );

@@ -47,6 +47,7 @@ export class Option extends React.Component<
 export class SelectWrapped extends React.Component<{
   multi?: boolean;
   setTouched: () => void;
+  disabled: boolean;
   onDelete: (value: { label: string; value: string }) => void;
 }> {
   public render() {
@@ -72,11 +73,21 @@ export class SelectWrapped extends React.Component<{
     if (this.props.multi) {
       return (
         <Chip
-          style={{ marginRight: 8, marginTop: 8 }}
+          style={{
+            marginRight: 8,
+            marginTop: 8,
+            opacity: this.props.disabled ? 0.61 : 1
+          }}
           tabIndex={-1}
           label={children}
-          deleteIcon={<CancelIcon onTouchEnd={onDelete} />}
-          onDelete={onDelete}
+          deleteIcon={
+            this.props.disabled ? (
+              undefined
+            ) : (
+              <CancelIcon onTouchEnd={onDelete} />
+            )
+          }
+          onDelete={this.props.disabled ? undefined : onDelete}
         />
       );
     }
@@ -95,6 +106,9 @@ export class SelectWrapped extends React.Component<{
   private renderArrow = (
     arrowProps: ArrowRendererProps
   ): HandlerRendererResult => {
+    if (this.props.disabled) {
+      return <ArrowDropUpIcon style={{ opacity: 0 }} />;
+    }
     return arrowProps.isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />;
   };
 

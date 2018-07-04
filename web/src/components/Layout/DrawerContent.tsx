@@ -7,18 +7,20 @@ import withStyles, {
 } from "@material-ui/core/styles/withStyles";
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Routes } from "src/singletons/HistoryManager";
 import { LinkStyle } from "../../utils/styles";
-
+interface IButton {
+  label: string;
+  to: string;
+}
 class DrawerContent extends React.Component<
-  WithStyles<ClassesNames> & { onClick: () => void }
+  WithStyles<ClassesNames> & { onClick: () => void; list: IButton[] }
 > {
   public render() {
     return (
       <List component="nav">
-        {this.makeLinkButton("Login", Routes.login.index)}
-        {this.makeLinkButton("Cadastro", Routes.cadastro.index)}
-        {this.makeLinkButton("Ajuda", Routes.ajuda.index)}
+        {this.props.list.map(x => {
+          return this.makeLinkButton(x.label, x.to);
+        })}
       </List>
     );
   }
@@ -26,7 +28,7 @@ class DrawerContent extends React.Component<
   private makeLinkButton = (label: string, to: string) => {
     const { onClick } = this.props;
     return (
-      <Link to={to} style={LinkStyle}>
+      <Link to={to} style={LinkStyle} key={label}>
         <ListItem button={true} onClick={onClick}>
           <ListItemText primary={label} />
         </ListItem>

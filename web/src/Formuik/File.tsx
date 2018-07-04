@@ -1,3 +1,4 @@
+import grey from "@material-ui/core/colors/grey";
 import FormControl, { FormControlProps } from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Input, { InputComponentProps } from "@material-ui/core/Input";
@@ -92,8 +93,37 @@ export class FileBase<T> extends React.Component<
     }
   };
 
+  private renderValue = () => {
+    const {
+      field,
+      multi,
+      form: { isSubmitting }
+    } = this.props;
+    const val =
+      multi && field.value !== ""
+        ? field.value.split(",").join(", ")
+        : field.value;
+    return (
+      field.value !== "" && (
+        <Typography
+          variant="subheading"
+          style={{
+            position: "absolute",
+            top: 8,
+            color: isSubmitting ? grey["500"] : "black"
+          }}
+        >
+          {val}
+        </Typography>
+      )
+    );
+  };
+
   private renderIPC = (props: InputComponentProps) => {
-    const { field } = this.props;
+    const {
+      field,
+      form: { isSubmitting }
+    } = this.props;
     return (
       <React.Fragment>
         <label
@@ -102,27 +132,32 @@ export class FileBase<T> extends React.Component<
             paddingTop: 16
           }}
         >
-          {field.value !== "" && (
-            <Typography
-              variant="subheading"
-              style={{ position: "absolute", top: 8 }}
-            >
-              {field.value}
-            </Typography>
+          {this.renderValue()}
+          {!isSubmitting ? (
+            <input
+              multiple={this.props.multi}
+              onBlur={field.onBlur}
+              onChange={this.onChange}
+              name={field.name}
+              style={{
+                width: "100%",
+                backgroundColor: "#ffff00",
+                visibility: "hidden",
+                height: 0
+              }}
+              type="file"
+            />
+          ) : (
+            <input
+              multiple={this.props.multi}
+              style={{
+                width: "100%",
+                backgroundColor: "#ffff00",
+                visibility: "hidden",
+                height: 0
+              }}
+            />
           )}
-          <input
-            multiple={this.props.multi}
-            onBlur={field.onBlur}
-            onChange={this.onChange}
-            name={field.name}
-            style={{
-              width: "100%",
-              backgroundColor: "#ffff00",
-              visibility: "hidden",
-              height: "100%"
-            }}
-            type="file"
-          />
         </label>
       </React.Fragment>
     );
